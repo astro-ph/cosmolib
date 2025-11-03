@@ -35,19 +35,20 @@ def normalize_result_axis(
             axis = -1
     return normalize_axis_tuple(axis, result.ndim, "axis")
 
+
 @dataclass(frozen=True, repr=False)
 class AngularPowerSpectrum:
     """
-    Result: A sleek dataclass for LSS numerical results and metadata.
+    AngularPowerSpectrum: A sleek dataclass for LSS numerical results and metadata.
     for angular power spectra and mixing matrix results.
 
     Attributes:
-        array: Main result data (always float dtype).
-        ell: Optional ellipsoid or error data.
-        axis: Axis or axes for the result.
-        lower: Optional lower bounds.
-        upper: Optional upper bounds.
-        weight: Optional weights.
+        array: Main power spectrum data (float dtype).
+        ell: Multipole moment(s) or bin centers.
+        axis: Axis or axes corresponding to result dimensions.
+        lower: Optional lower error bounds.
+        upper: Optional upper error bounds.
+        weight: Optional weights (e.g. mode counts or covariance weights).
         software: Optional software identifier.
     """
 
@@ -60,48 +61,92 @@ class AngularPowerSpectrum:
     software: str | None = None
 
     def __post_init__(self) -> None:
-        # Ensure array is float dtype for consistency
         float_array = np.asarray(self.array, dtype=float)
         object.__setattr__(self, "array", float_array)
-
-        # Normalize axis after setting array
         axis = normalize_result_axis(self.axis, self.array, self.ell)
         object.__setattr__(self, "axis", axis)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(axis={self.axis!r})"
 
-
     def __array__(
-    self,
-    dtype: np.dtype[Any] | None = None,
-    *,
-    copy: bool | None = None,
+        self,
+        dtype: np.dtype[Any] | None = None,
+        *,
+        copy: bool | None = None,
     ) -> NDArray[Any]:
-        """
-        Allow Result to be used as a NumPy array.
-        """
         if copy is not None:
             return self.array.__array__(dtype, copy=copy)
         return self.array.__array__(dtype)
 
     def __getitem__(self, key: Any) -> Any:
-        """
-        Index into the result array.
-        """
         return self.array[key]
 
     @property
     def ndim(self) -> int:
-        """Number of dimensions."""
         return self.array.ndim
 
     @property
     def shape(self) -> tuple[int, ...]:
-        """Shape of the result array."""
         return self.array.shape
 
     @property
     def dtype(self) -> np.dtype[Any]:
-        """Data type of the result array."""
+        return self.array.dtype
+
+@dataclass(frozen=True, repr=False)
+class TwoPointCorrelationFunction:
+    """
+    TwoPointCorrelationFunction: Dataclass for 2PCF results and metadata.
+
+    Attributes:
+        array: Main correlation data (float dtype).
+        theta: Angular separation(s) or bin centers.
+        axis: Axis or axes corresponding to result dimensions.
+        lower: Optional lower error bounds.
+        upper: Optional upper error bounds.
+        weight: Optional weights (e.g. pair counts or covariance weights).
+        software: Optional software identifier.
+    """
+
+    array: NDArray[Any]
+    theta: NDArray[Any] | tuple[NDArray[Any], ...] | None = None
+    axis: int | tuple[int, ...] | None = None
+    lower: NDArray[Any] | tuple[NDArray[Any], ...] | None = None
+    upper: NDArray[Any] | tuple[NDArray[Any], ...] | None = None
+    weight: NDArray[Any] | tuple[NDArray[Any], ...] | None = None
+    software: str | None = None
+
+    def __post_init__(self) -> None:
+        float_array = np.asarray(self.array, dtype=float)
+        object.__setattr__(self, "array", float_array)
+        axis = normalize_result_axis(self.axis, self.array, self.theta)
+        object.__setattr__(self, "axis", axis)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(axis={self.axis!r})"
+
+    def __array__(
+        self,
+        dtype: np.dtype[Any] | None = None,
+        *,
+        copy: bool | None = None,
+    ) -> NDArray[Any]:
+        if copy is not None:
+            return self.array.__array__(dtype, copy=copy)
+        return self.array.__array__(dtype)
+
+    def __getitem__(self, key: Any) -> Any:
+        return self.array[key]
+
+    @property
+    def ndim(self) -> int:
+        return self.array.ndim
+
+    @property
+    def shape(self) -> tuple[int, ...]:
+        return self.array.shape
+
+    @property
+    def dtype(self) -> np.dtype[Any]:
         return self.array.dtype
