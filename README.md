@@ -1,4 +1,4 @@
-**cosmolib**
+# **cosmolib**
 
 _A lightweight Python library for handling cosmology data formats and creating publication-quality plots._
 Designed for **clarity**, **composability**, and **seamless data format integration** into scientific cosmological softwares.
