@@ -4,7 +4,6 @@ from dataclasses import dataclass
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    from os import PathLike
     from typing import Any, TypeAlias
     from numpy.typing import NDArray
 
@@ -93,6 +92,7 @@ class AngularPowerSpectrum:
     @property
     def dtype(self) -> np.dtype[Any]:
         return self.array.dtype
+
 
 @dataclass(frozen=True, repr=False)
 class TwoPointCorrelationFunction:
