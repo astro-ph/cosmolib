@@ -23,7 +23,7 @@ pip install cosmolib
 **From source (for developers and contributors):**
 
 ```bash
-git clone https://github.com/<your-org>/cosmolib.git
+git clone https://github.com/astro-ph/cosmolib.git
 cd cosmolib
 pip install -e .
 ```
