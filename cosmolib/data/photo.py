@@ -150,3 +150,58 @@ class TwoPointCorrelationFunction:
     @property
     def dtype(self) -> np.dtype[Any]:
         return self.array.dtype
+
+
+@dataclass(frozen=True, repr=False)
+class COSEBI:
+    """
+    AngularPowerSpectrum: A sleek dataclass for LSS numerical results and metadata.
+    for angular power spectra and mixing matrix results.
+
+    Attributes:
+        array: Main power spectrum data (float dtype).
+        axis: Axis or axes corresponding to result dimensions.
+        mode: Multipole moment(s) or bin centers.
+        nmode: Optional number of modes per bin
+        software: Optional software identifier.
+    """
+
+    array: NDArray[Any]
+    axis: int | tuple[int, ...] | None = None
+    mode: int | tuple[int, ...] | None = None
+    nmode: int | tuple[int, ...] | None = None
+    software: str | None = None
+
+    def __post_init__(self) -> None:
+        float_array = np.asarray(self.array, dtype=float)
+        object.__setattr__(self, "array", float_array)
+        axis = normalize_result_axis(self.axis, self.array, self.ell)
+        object.__setattr__(self, "axis", axis)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(axis={self.axis!r})"
+
+    def __array__(
+        self,
+        dtype: np.dtype[Any] | None = None,
+        *,
+        copy: bool | None = None,
+    ) -> NDArray[Any]:
+        if copy is not None:
+            return self.array.__array__(dtype, copy=copy)
+        return self.array.__array__(dtype)
+
+    def __getitem__(self, key: Any) -> Any:
+        return self.array[key]
+
+    @property
+    def ndim(self) -> int:
+        return self.array.ndim
+
+    @property
+    def shape(self) -> tuple[int, ...]:
+        return self.array.shape
+
+    @property
+    def dtype(self) -> np.dtype[Any]:
+        return self.array.dtype
