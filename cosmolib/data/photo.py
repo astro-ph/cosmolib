@@ -163,13 +163,15 @@ class COSEBI:
         axis: Axis or axes corresponding to result dimensions.
         mode: Multipole moment(s) or bin centers.
         nmode: Optional number of modes per bin
+        thmin: Optional minimum angular scale.
+        thmax: Optional maximum angular scale.
         software: Optional software identifier.
     """
 
     array: NDArray[Any]
     axis: int | tuple[int, ...] | None = None
     mode: int | tuple[int, ...] | None = None
-    nmode: int | tuple[int, ...] | None = None
+    nmodes: int | tuple[int, ...] | None = None
     thmin: float | None = None
     thmax: float | None = None
     software: str | None = None
@@ -177,7 +179,7 @@ class COSEBI:
     def __post_init__(self) -> None:
         float_array = np.asarray(self.array, dtype=float)
         object.__setattr__(self, "array", float_array)
-        axis = normalize_result_axis(self.axis, self.array, self.ell)
+        axis = normalize_result_axis(self.axis, self.array, self.mode)
         object.__setattr__(self, "axis", axis)
 
     def __repr__(self) -> str:
