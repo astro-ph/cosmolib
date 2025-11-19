@@ -170,6 +170,8 @@ class COSEBI:
     axis: int | tuple[int, ...] | None = None
     mode: int | tuple[int, ...] | None = None
     nmode: int | tuple[int, ...] | None = None
+    thmin: float | None = None
+    thmax: float | None = None
     software: str | None = None
 
     def __post_init__(self) -> None:
