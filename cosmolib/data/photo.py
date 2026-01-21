@@ -58,6 +58,7 @@ class AngularPowerSpectrum:
     upper: NDArray[Any] | tuple[NDArray[Any], ...] | None = None
     weight: NDArray[Any] | tuple[NDArray[Any], ...] | None = None
     software: str | None = None
+    metadata: dict[str, Any] | None = None
 
     def __post_init__(self) -> None:
         float_array = np.asarray(self.array, dtype=float)
