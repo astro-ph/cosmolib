@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class PowerSpectrumFullShape:
+class PowerSpectrum:
     """
     Output datamodel for read LE3 GC PK measurements, containing information on the header and the power spectrum multipoles.
 
@@ -23,15 +23,26 @@ class PowerSpectrumFullShape:
         number of modes in each k bin
     p : dict[ndarray]
         multipoles of the power spectrum (keys are integer l's from 0 to 4)
-    header : dict
-        fits header of the original measurement file
+    fiducial_cosmology : dict[str, float]
+        Fiducial cosmology used in the measurement
+    redshift_eff : ndarray
+        Effective redshift of the measurement
+    shot_noise : float
+        Value of shot noise
+    number_density : float
+        Number density of galaxies used in the measurement
+    shot_noise : float
+        Value of shot noise
     """
 
     k: NDArray[Any]
     k_eff: NDArray[Any]
     mode_number: NDArray[Any]
     p: dict[int, NDArray[Any]]
-    header: dict[str, Any]
+    fiducial_cosmology: dict[str, float] # Fiducial cosmology used in the measurement
+    redshift_eff: NDArray[Any] # Effective redshift of the measurement
+    number_density: float # Number density of galaxies used in the measurement
+    shot_noise: float # Value of shot noise
 
     def __post_init__(self) -> None:
         # Sanity check on the attributes
@@ -56,18 +67,4 @@ class PowerSpectrumFullShape:
 
     def __len__(self) -> int:
         return len(self.k)
-
-    @property
-    def shot_noise(self) -> float:
-        """
-        Returns value of shot noise
-        """
-        return cast(float, self.header["SN_VALUE"])
-
-    # For later, if z will ever be added to the header
-    # @property
-    # def redshift(self) -> float:
-    #     """
-    #     Returns value of effective redshift
-    #     """
-    #     return self.header["Z_PLACEHOLDER"]
+    
