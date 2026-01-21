@@ -1,6 +1,5 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import cast
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -39,10 +38,10 @@ class PowerSpectrum:
     k_eff: NDArray[Any]
     mode_number: NDArray[Any]
     p: dict[int, NDArray[Any]]
-    fiducial_cosmology: dict[str, float] # Fiducial cosmology used in the measurement
-    redshift_eff: NDArray[Any] # Effective redshift of the measurement
-    number_density: float # Number density of galaxies used in the measurement
-    shot_noise: float # Value of shot noise
+    fiducial_cosmology: dict[str, float]  # Fiducial cosmology used in the measurement
+    redshift_eff: NDArray[Any]  # Effective redshift of the measurement
+    number_density: float  # Number density of galaxies used in the measurement
+    shot_noise: float  # Value of shot noise
 
     def __post_init__(self) -> None:
         # Sanity check on the attributes
@@ -67,4 +66,3 @@ class PowerSpectrum:
 
     def __len__(self) -> int:
         return len(self.k)
-    
