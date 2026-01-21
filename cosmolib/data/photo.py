@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    from typing import Any, TypeAlias
+    from typing import Any, TypeAlias, Sequence
     from numpy.typing import NDArray
 
     _DictKey: TypeAlias = str | int | tuple["_DictKey", ...]
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 def normalize_result_axis(
     axis: tuple[int, ...] | int | None,
     result: NDArray[Any],
-    ell: tuple[NDArray[Any], ...] | NDArray[Any] | None,
+    ell: Sequence[Any] | NDArray[Any] | None,
 ) -> tuple[int, ...]:
     """
     Normalize the axis argument for result arrays.

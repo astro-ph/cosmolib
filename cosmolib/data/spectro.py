@@ -1,11 +1,12 @@
 from __future__ import annotations
-import numpy as np
 from dataclasses import dataclass
+from typing import cast
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    from typing import Any, TypeAlias
+    from typing import Any
     from numpy.typing import NDArray
+
 
 @dataclass(frozen=True)
 class PowerSpectrumFullShape:
@@ -25,6 +26,7 @@ class PowerSpectrumFullShape:
     header : dict
         fits header of the original measurement file
     """
+
     k: NDArray[Any]
     k_eff: NDArray[Any]
     mode_number: NDArray[Any]
@@ -37,17 +39,21 @@ class PowerSpectrumFullShape:
             [
                 len(self.k) != len(self.k_eff),
                 any([len(self.k) != len(p_el) for p_el in self.p.values()]),
-                len(self.k) != len(self.mode_number)
+                len(self.k) != len(self.mode_number),
             ]
         ):
-            raise ValueError("Inconsistent class attributes, all arrays must have the same length.")
-        for l in range(5):
-            if l not in self.p:
-                raise ValueError("Power spectrum attribute must contain all multipoles from 0 to 4.")
+            raise ValueError(
+                "Inconsistent class attributes, all arrays must have the same length."
+            )
+        for ell in range(5):
+            if ell not in self.p:
+                raise ValueError(
+                    "Power spectrum attribute must contain all multipoles from 0 to 4."
+                )
 
-    def __getitem__(self, l: int) -> NDArray[Any]:
-        return self.p[l]
-        
+    def __getitem__(self, ell: int) -> NDArray[Any]:
+        return self.p[ell]
+
     def __len__(self) -> int:
         return len(self.k)
 
@@ -56,7 +62,7 @@ class PowerSpectrumFullShape:
         """
         Returns value of shot noise
         """
-        return self.header["SN_VALUE"]
+        return cast(float, self.header["SN_VALUE"])
 
     # For later, if z will ever be added to the header
     # @property
