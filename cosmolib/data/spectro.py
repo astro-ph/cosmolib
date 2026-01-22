@@ -37,7 +37,7 @@ class PowerSpectrum:
     k: NDArray[Any]
     k_eff: NDArray[Any]
     mode_number: NDArray[Any]
-    p: dict[int, NDArray[Any]]
+    p: NDArray[Any]
     fiducial_cosmology: dict[str, float]  # Fiducial cosmology used in the measurement
     redshift_eff: NDArray[Any]  # Effective redshift of the measurement
     number_density: float  # Number density of galaxies used in the measurement
@@ -48,21 +48,12 @@ class PowerSpectrum:
         if any(
             [
                 len(self.k) != len(self.k_eff),
-                any([len(self.k) != len(p_el) for p_el in self.p.values()]),
                 len(self.k) != len(self.mode_number),
             ]
         ):
             raise ValueError(
                 "Inconsistent class attributes, all arrays must have the same length."
             )
-        for ell in range(5):
-            if ell not in self.p:
-                raise ValueError(
-                    "Power spectrum attribute must contain all multipoles from 0 to 4."
-                )
-
-    def __getitem__(self, ell: int) -> NDArray[Any]:
-        return self.p[ell]
 
     def __len__(self) -> int:
         return len(self.k)
