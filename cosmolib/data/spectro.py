@@ -8,52 +8,195 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class PowerSpectrum:
+class PS_ell:
     """
-    Output datamodel for read LE3 GC PK measurements, containing information on the header and the power spectrum multipoles.
+    Output data model to store LE3-PK-GC Legendre multipole measurements.
 
     Attributes
     ----------
     k : ndarray
-        centers of k bins
-    k_eff : ndarray
-        effective values of k bins
-    mode_number : ndarray
-        number of modes in each k bin
-    p : dict[ndarray]
-        multipoles of the power spectrum (keys are integer l's from 0 to 4)
+        Centers of $k$ bins
+    keff : ndarray
+        Effective values of $k$ bins
+    Nmodes : ndarray
+        Number of modes in each $k$ bin
+    multipole : ndarray
+        Legendre multipole of the anisotropic power spectrum
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
-    redshift_eff : ndarray
-        Effective redshift of the measurement
-    shot_noise : float
-        Value of shot noise
-    number_density : float
-        Number density of galaxies used in the measurement
-    shot_noise : float
-        Value of shot noise
+    zeff : ndarray
+        Effective redshift of the sample
+    nbar : float
+        Number density of the sample
+    Psn : float
+        Poissonian shot noise contribution
     """
-
     k: NDArray[Any]
-    k_eff: NDArray[Any]
-    mode_number: NDArray[Any]
-    p: NDArray[Any]
-    fiducial_cosmology: dict[str, float]  # Fiducial cosmology used in the measurement
-    redshift_eff: NDArray[Any]  # Effective redshift of the measurement
-    number_density: float  # Number density of galaxies used in the measurement
-    shot_noise: float  # Value of shot noise
+    keff: NDArray[Any]
+    Nmodes: NDArray[Any]
+    multipole: NDArray[Any]
+    fiducial_cosmology: dict[str, float]
+    zeff: float
+    nbar: float
+    Psn: float
 
     def __post_init__(self) -> None:
-        # Sanity check on the attributes
-        if any(
-            [
-                len(self.k) != len(self.k_eff),
-                len(self.k) != len(self.mode_number),
-            ]
-        ):
+        if any([len(self.k) != len(self.keff),
+                len(self.k) != len(self.Nmodes),]):
             raise ValueError(
-                "Inconsistent class attributes, all arrays must have the same length."
-            )
+                "Inconsistent class attributes, all arrays must have the same "
+                " length.")
 
     def __len__(self) -> int:
         return len(self.k)
+
+
+@dataclass(frozen=True)
+class TPCF_2Dcart:
+    """
+    Output data model to store LE3-2PCF-GC 2D cartesian correlation measurements.
+
+    Attributes
+    ----------
+    s_perp : ndarray
+        Separation $s_\perp$ ortoghonal to the line of sight
+    s_para : ndarray
+        Separation $s_\parallel$ parallel to the line of sight
+    correlation : ndarray
+        2D cartesian 2PCF
+    fiducial_cosmology : dict[str, float]
+        Fiducial cosmology used in the measurement
+    zeff : ndarray
+        Effective redshift of the sample
+    """
+    s_perp: NDArray[Any]
+    s_para: NDArray[Any]
+    correlation: NDArray[Any]
+    fiducial_cosmology: dict[str, float]
+    redshift_eff: float
+
+    def __len__(self) -> int:
+        return (len(self.s_perp), len(self.s_para))
+
+
+@dataclass(frozen=True)
+class TPCF_2Dpol:
+    """
+    Output data model to store LE3-2PCF-GC 2D polar correlation measurements.
+
+    Attributes
+    ----------
+    s : ndarray
+        Separation $s$
+    mu : ndarray
+        Cosinus $\mu$ of the angle to the line of sight
+    correlation : ndarray
+        2D polar 2PCF
+    fiducial_cosmology : dict[str, float]
+        Fiducial cosmology used in the measurement
+    zeff : ndarray
+        Effective redshift of the sample
+    """
+    s: NDArray[Any]
+    mu: NDArray[Any]
+    correlation: NDArray[Any]
+    fiducial_cosmology: dict[str, float]
+    redshift_eff: float
+
+    def __len__(self) -> int:
+        return (len(self.s), len(self.mu))
+
+
+@dataclass(frozen=True)
+class TPCF_ell:
+    """
+    Output data model to store LE3-2PCF-GC Legendre multipole measurements.
+
+    Attributes
+    ----------
+    s : ndarray
+        Separation $s$
+    multipole : ndarray
+        Legendre multipole of the anisotropic 2PCF
+    fiducial_cosmology : dict[str, float]
+        Fiducial cosmology used in the measurement
+    zeff : ndarray
+        Effective redshift of the sample
+    """
+    s: NDArray[Any]
+    multipole: NDArray[Any]
+    fiducial_cosmology: dict[str, float]
+    redshift_eff: float
+
+    def __len__(self) -> int:
+        return len(self.s)
+
+
+@dataclass(frozen=True)
+class Cov_PS_ell:
+    """
+    Output data model to store LE3-CM-PK-GC covariances of the Legendre
+    multipole measurements.
+
+    Attributes
+    ----------
+    k : ndarray
+        Centers of $k$ bins
+    cov : ndarray
+        Covariance of the Legendre multipoles of the power spectrum
+    zeff : ndarray
+        Effective redshift of the sample
+    """
+    k: NDArray[Any]
+    covariance: NDArray[Any]
+    zeff: float
+
+    def __len__(self) -> int:
+        return len(self.k)
+
+
+@dataclass(frozen=True)
+class Cov_TPCF_ell:
+    """
+    Output data model to store LE3-CM-2PCF-GC covariances of the Legendre
+    multipole measurements.
+
+    Attributes
+    ----------
+    s : ndarray
+        Separation $s$
+    cov : ndarray
+        Covariance of the Legendre multipoles of the 2PCF
+    zeff : ndarray
+        Effective redshift of the sample
+    """
+    s: NDArray[Any]
+    covariance: NDArray[Any]
+    redshift_eff: float
+
+    def __len__(self) -> int:
+        return len(self.s)
+
+
+@dataclass(frozen=True)
+class MixMat_PS_ell:
+    """
+    Output data model to store mixing matrices of the Legendre
+    multipole measurements.
+
+    Attributes
+    ----------
+    kout : ndarray
+        Output wavemodes $k$
+    kin : dict[ndarray]
+        Input wavemodes $k$ per multipole
+    mixing : ndarray
+        Mixing matrix
+    """
+    kout: NDArray[Any]
+    kin: dict[Any, NDArray[Any]]
+    mixing: NDArray[Any]
+    zeff: float
+
+    def __len__(self) -> int:
+        return (len(self.kout), len(self.kin))
