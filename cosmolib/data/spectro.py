@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class PS_ell:
+class PowerSpectrumMultipoles:
     """
     Output data model to store LE3-PK-GC Legendre multipole measurements.
 
@@ -20,8 +20,8 @@ class PS_ell:
         Effective values of $k$ bins
     Nmodes : ndarray
         Number of modes in each $k$ bin
-    multipole : ndarray
-        Legendre multipole of the anisotropic power spectrum
+    multipoles : dict
+        Legendre multipoles of the anisotropic power spectrum
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
     zeff : ndarray
@@ -34,7 +34,7 @@ class PS_ell:
     k: NDArray[Any]
     keff: NDArray[Any]
     Nmodes: NDArray[Any]
-    multipole: NDArray[Any]
+    multipoles: dict[str, NDArray[Any]]
     fiducial_cosmology: dict[str, float]
     zeff: float
     nbar: float
@@ -52,7 +52,7 @@ class PS_ell:
 
 
 @dataclass(frozen=True)
-class TPCF_2Dcart:
+class TwoPointCorrelationCartesian:
     """
     Output data model to store LE3-2PCF-GC 2D cartesian correlation measurements.
 
@@ -80,7 +80,7 @@ class TPCF_2Dcart:
 
 
 @dataclass(frozen=True)
-class TPCF_2Dpol:
+class TwoPointCorrelationPolar:
     """
     Output data model to store LE3-2PCF-GC 2D polar correlation measurements.
 
@@ -108,7 +108,7 @@ class TPCF_2Dpol:
 
 
 @dataclass(frozen=True)
-class TPCF_ell:
+class TwoPointCorrelationMultipoles:
     """
     Output data model to store LE3-2PCF-GC Legendre multipole measurements.
 
@@ -116,15 +116,15 @@ class TPCF_ell:
     ----------
     s : ndarray
         Separation $s$
-    multipole : ndarray
-        Legendre multipole of the anisotropic 2PCF
+    multipoles : dict
+        Legendre multipoles of the anisotropic 2PCF
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
     zeff : ndarray
         Effective redshift of the sample
     """
     s: NDArray[Any]
-    multipole: NDArray[Any]
+    multipoles: dict[str, NDArray[Any]]
     fiducial_cosmology: dict[str, float]
     redshift_eff: float
 
@@ -133,7 +133,7 @@ class TPCF_ell:
 
 
 @dataclass(frozen=True)
-class Cov_PS_ell:
+class PowerSpectrumMultipolesCovariance:
     """
     Output data model to store LE3-CM-PK-GC covariances of the Legendre
     multipole measurements.
@@ -156,7 +156,7 @@ class Cov_PS_ell:
 
 
 @dataclass(frozen=True)
-class Cov_TPCF_ell:
+class TwoPointCorrelationMultipolesCovariance:
     """
     Output data model to store LE3-CM-2PCF-GC covariances of the Legendre
     multipole measurements.
@@ -179,7 +179,7 @@ class Cov_TPCF_ell:
 
 
 @dataclass(frozen=True)
-class MixMat_PS_ell:
+class PowerSpectrumMultipolesMixingMatrix:
     """
     Output data model to store mixing matrices of the Legendre
     multipole measurements.
