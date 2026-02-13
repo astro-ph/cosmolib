@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class PowerSpectrumMultipoles:
     """
-    Output data model to store LE3-PK-GC Legendre multipole measurements.
+    Output data model to store power spectrum Legendre multipole measurements.
 
     Attributes
     ----------
@@ -54,7 +54,7 @@ class PowerSpectrumMultipoles:
 @dataclass(frozen=True)
 class TwoPointCorrelationCartesian:
     """
-    Output data model to store LE3-2PCF-GC 2D cartesian correlation measurements.
+    Output data model to store 2-point correlation function (cartesian) measurements.
 
     Attributes
     ----------
@@ -82,7 +82,7 @@ class TwoPointCorrelationCartesian:
 @dataclass(frozen=True)
 class TwoPointCorrelationPolar:
     """
-    Output data model to store LE3-2PCF-GC 2D polar correlation measurements.
+    Output data model to store 2-point correlation function (polar) measurements.
 
     Attributes
     ----------
@@ -110,7 +110,7 @@ class TwoPointCorrelationPolar:
 @dataclass(frozen=True)
 class TwoPointCorrelationMultipoles:
     """
-    Output data model to store LE3-2PCF-GC Legendre multipole measurements.
+    Output data model to store 2-point correlation function Legendre multipole measurements.
 
     Attributes
     ----------
@@ -135,8 +135,8 @@ class TwoPointCorrelationMultipoles:
 @dataclass(frozen=True)
 class PowerSpectrumMultipolesCovariance:
     """
-    Output data model to store LE3-CM-PK-GC covariances of the Legendre
-    multipole measurements.
+    Output data model to store covariance matrices of the power spectrum
+    Legendre multipole measurements.
 
     Attributes
     ----------
@@ -159,7 +159,8 @@ class PowerSpectrumMultipolesCovariance:
 @dataclass(frozen=True)
 class TwoPointCorrelationMultipolesCovariance:
     """
-    Output data model to store LE3-CM-2PCF-GC covariances of the Legendre
+    Output data model to store covariance matrices of the 2-point correlation
+    Legendre
     multipole measurements.
 
     Attributes
@@ -182,7 +183,7 @@ class TwoPointCorrelationMultipolesCovariance:
 @dataclass(frozen=True)
 class PowerSpectrumMultipolesMixingMatrix:
     """
-    Output data model to store mixing matrices of the Legendre
+    Output data model to store mixing matrices of the power spectrum Legendre
     multipole measurements.
 
     Attributes
