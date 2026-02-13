@@ -20,7 +20,7 @@ class PowerSpectrumMultipoles:
         Effective values of $k$ bins
     Nmodes : ndarray
         Number of modes in each $k$ bin
-    multipoles : dict
+    multipoles : ndarray
         Legendre multipoles of the anisotropic power spectrum
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
@@ -34,7 +34,7 @@ class PowerSpectrumMultipoles:
     k: NDArray[Any]
     keff: NDArray[Any]
     Nmodes: NDArray[Any]
-    multipoles: dict[str, NDArray[Any]]
+    multipoles: NDArray[Any]
     fiducial_cosmology: dict[str, float]
     zeff: float
     nbar: float
@@ -73,7 +73,7 @@ class TwoPointCorrelationCartesian:
     s_para: NDArray[Any]
     correlation: NDArray[Any]
     fiducial_cosmology: dict[str, float]
-    redshift_eff: float
+    zeff: float
 
     def __len__(self) -> int:
         return (len(self.s_perp), len(self.s_para))
@@ -101,7 +101,7 @@ class TwoPointCorrelationPolar:
     mu: NDArray[Any]
     correlation: NDArray[Any]
     fiducial_cosmology: dict[str, float]
-    redshift_eff: float
+    zeff: float
 
     def __len__(self) -> int:
         return (len(self.s), len(self.mu))
@@ -116,7 +116,7 @@ class TwoPointCorrelationMultipoles:
     ----------
     s : ndarray
         Separation $s$
-    multipoles : dict
+    multipoles : ndarray
         Legendre multipoles of the anisotropic 2PCF
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
@@ -124,9 +124,9 @@ class TwoPointCorrelationMultipoles:
         Effective redshift of the sample
     """
     s: NDArray[Any]
-    multipoles: dict[str, NDArray[Any]]
+    multipoles: NDArray[Any]
     fiducial_cosmology: dict[str, float]
-    redshift_eff: float
+    zeff: float
 
     def __len__(self) -> int:
         return len(self.s)
@@ -142,13 +142,14 @@ class PowerSpectrumMultipolesCovariance:
     ----------
     k : ndarray
         Centers of $k$ bins
-    cov : ndarray
-        Covariance of the Legendre multipoles of the power spectrum
+    cov : dict
+        Auto and cross covariances of the Legendre multipoles of the
+        power spectrum
     zeff : ndarray
         Effective redshift of the sample
     """
     k: NDArray[Any]
-    covariance: NDArray[Any]
+    covariance: dict[str, NDArray[Any]]
     zeff: float
 
     def __len__(self) -> int:
@@ -165,14 +166,14 @@ class TwoPointCorrelationMultipolesCovariance:
     ----------
     s : ndarray
         Separation $s$
-    cov : ndarray
-        Covariance of the Legendre multipoles of the 2PCF
+    cov : dict
+        Auto and cross covariances of the Legendre multipoles of the 2PCF
     zeff : ndarray
         Effective redshift of the sample
     """
     s: NDArray[Any]
-    covariance: NDArray[Any]
-    redshift_eff: float
+    covariance: dict[str, NDArray[Any]]
+    zeff: float
 
     def __len__(self) -> int:
         return len(self.s)
@@ -190,12 +191,12 @@ class PowerSpectrumMultipolesMixingMatrix:
         Output wavemodes $k$
     kin : dict[ndarray]
         Input wavemodes $k$ per multipole
-    mixing : ndarray
-        Mixing matrix
+    mixing : dict[ndarray]
+        Individual blocks of the mixing matrix
     """
     kout: NDArray[Any]
     kin: dict[Any, NDArray[Any]]
-    mixing: NDArray[Any]
+    mixing: dict[str, NDArray[Any]]
     zeff: float
 
     def __len__(self) -> int:
