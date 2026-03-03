@@ -202,3 +202,32 @@ class PowerSpectrumMultipolesMixingMatrix:
 
     def __len__(self) -> int:
         return (len(self.kout), len(self.kin))
+
+
+@dataclass(frozen=True)
+class BaryonAcousticOscillations:
+    """
+    Output data model to store alpha parameters from fits of the
+    post-reconstruction spectroscopic observables.
+
+    Attributes
+    ----------
+    alpha_par : float
+        Value of parallel BAO scale parameter
+    alpha_perp : float
+        Value of perpendicular BAO scale parameter
+    alpha_iso : float
+        Value of isotropic BAO scale parameter
+    alpha_ap : float
+        Value of Alcock-Packzynski parameter
+    fiducial_cosmology : dict[str, float]
+        Fiducial cosmology used in the measurement
+    zeff : ndarray
+        Effective redshift of the sample
+    """
+    alpha_par: float
+    alpha_perp: float
+    alpha_iso: float
+    alpha_ap: float
+    fiducial_cosmology: dict[str, float]
+    zeff: float
