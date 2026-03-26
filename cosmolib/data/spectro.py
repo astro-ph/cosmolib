@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Union, Tuple
     from numpy.typing import NDArray
 
 
@@ -222,7 +222,7 @@ class BaryonAcousticOscillations:
         Value of Alcock-Packzynski parameter
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
-    zeff : ndarray
+    zeff : float
         Effective redshift of the sample
     """
     alpha_par: float
@@ -230,4 +230,26 @@ class BaryonAcousticOscillations:
     alpha_iso: float
     alpha_ap: float
     fiducial_cosmology: dict[str, float]
+    zeff: float
+
+
+@dataclass(frozen=True)
+class BaryonAcousticOscillationsCovariance:
+    """
+    Output data model to store covariance for the BAO alpha parameters
+
+    Attributes
+    ----------
+    observables : str or tuple of str
+        Observables in the covariance, in the correct order
+    covariance : dict
+        Covariance of the BAO alphas
+    correction_factor : float
+        Correction factor m2 for the covariance, as in eq. of Percival+2014
+    zeff : float
+        Effective redshift of the sample
+    """
+    observables: Union[str, Tuple[str, ...]]
+    covariance: dict[str, NDArray[Any]]
+    correction_factor: float
     zeff: float
