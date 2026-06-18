@@ -189,13 +189,16 @@ class PowerSpectrumMultipolesMixingMatrix:
     Attributes
     ----------
     kout : ndarray
-        Output wavemodes $k$
+        Effective output wavemodes $k$
+    kcenter : ndarray
+        Center of the $k$ bins
     kin : dict[ndarray]
         Input wavemodes $k$ per multipole
     mixing : dict[ndarray]
         Individual blocks of the mixing matrix
     """
     kout: NDArray[Any]
+    kcenter: NDArray[Any]
     kin: dict[Any, NDArray[Any]]
     mixing: dict[str, NDArray[Any]]
     zeff: float
