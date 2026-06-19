@@ -196,12 +196,21 @@ class PowerSpectrumMultipolesMixingMatrix:
         Input wavemodes $k$ per multipole
     mixing : dict[ndarray]
         Individual blocks of the mixing matrix
+    zeff : ndarray
+        Effective redshift of the sample
+    nbar : float
+        Number density of the sample
+    Psn : float
+        Poissonian shot noise contribution
+
     """
     kout: NDArray[Any]
     kcenter: NDArray[Any]
     kin: dict[Any, NDArray[Any]]
     mixing: dict[str, NDArray[Any]]
     zeff: float
+    nbar: float
+    Psn: float
 
     def __len__(self) -> int:
         return (len(self.kout), len(self.kin))
