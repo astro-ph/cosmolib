@@ -2,12 +2,36 @@ from __future__ import annotations
 import numpy as np
 from dataclasses import dataclass
 
+try:
+    import jax as _jax
+except ImportError:  # jax is an optional, soft dependency of cosmolib
+    _jax = None
+
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from typing import Any, TypeAlias, Sequence
     from numpy.typing import NDArray
 
     _DictKey: TypeAlias = str | int | tuple["_DictKey", ...]
+
+
+def _asarray_float(array: Any) -> NDArray[Any]:
+    """Convert `array` to a float array, preserving a JAX trace if present.
+
+    A plain `np.asarray` call on a JAX tracer (e.g. inside `jax.grad`) raises
+    `jax.errors.TracerArrayConversionError` - NumPy has no way to pull a
+    concrete value out of an abstract trace, by design. `jax.Array` is
+    JAX's common type for both concrete arrays and tracers (so this branch
+    doesn't need to special-case tracing vs. not), so callers passing plain
+    NumPy/Python data keep the exact same `np.asarray` path as before, while
+    callers passing a JAX array or tracer keep it live through
+    `jax.numpy.asarray` instead - this is the one place downstream code
+    (e.g. `cloelib`'s `AngularTwoPoint.get_Cl`) needed to stop breaking
+    `jax.grad`.
+    """
+    if _jax is not None and isinstance(array, _jax.Array):
+        return _jax.numpy.asarray(array, dtype=float)
+    return np.asarray(array, dtype=float)
 
 
 def normalize_result_axis(
@@ -61,7 +85,7 @@ class AngularPowerSpectrum:
     metadata: dict[str, Any] | None = None
 
     def __post_init__(self) -> None:
-        float_array = np.asarray(self.array, dtype=float)
+        float_array = _asarray_float(self.array)
         object.__setattr__(self, "array", float_array)
         axis = normalize_result_axis(self.axis, self.array, self.ell)
         object.__setattr__(self, "axis", axis)
@@ -119,7 +143,7 @@ class TwoPointCorrelationFunction:
     software: str | None = None
 
     def __post_init__(self) -> None:
-        float_array = np.asarray(self.array, dtype=float)
+        float_array = _asarray_float(self.array)
         object.__setattr__(self, "array", float_array)
         axis = normalize_result_axis(self.axis, self.array, self.theta)
         object.__setattr__(self, "axis", axis)
@@ -178,7 +202,7 @@ class COSEBI:
     software: str | None = None
 
     def __post_init__(self) -> None:
-        float_array = np.asarray(self.array, dtype=float)
+        float_array = _asarray_float(self.array)
         object.__setattr__(self, "array", float_array)
         axis = normalize_result_axis(self.axis, self.array, self.mode)
         object.__setattr__(self, "axis", axis)
