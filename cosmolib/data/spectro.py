@@ -230,8 +230,8 @@ class BaryonAcousticOscillations:
         Value of perpendicular BAO scale parameter
     alpha_iso : float
         Value of isotropic BAO scale parameter
-    alpha_ap : float
-        Value of Alcock-Packzynski parameter
+    alpha_AP : float
+        Value of Alcock-Paczynski parameter
     fiducial_cosmology : dict[str, float]
         Fiducial cosmology used in the measurement
     zeff : float
@@ -240,7 +240,7 @@ class BaryonAcousticOscillations:
     alpha_par: float
     alpha_perp: float
     alpha_iso: float
-    alpha_ap: float
+    alpha_AP: float
     fiducial_cosmology: dict[str, float]
     zeff: float
 
