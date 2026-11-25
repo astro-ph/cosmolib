@@ -4,6 +4,7 @@ from .spectro import PowerSpectrumMultipoles, TwoPointCorrelationCartesian, TwoP
 from .spectro import PowerSpectrumMultipolesCovariance, TwoPointCorrelationMultipolesCovariance
 from .spectro import PowerSpectrumMultipolesMixingMatrix
 from .spectro import BaryonAcousticOscillations, BaryonAcousticOscillationsCovariance
+from .mixing import apply_mixing_matrix, apply_mixing_matrices
 
 __all__ = [
     "AngularPowerSpectrum",
@@ -18,4 +19,6 @@ __all__ = [
     "TwoPointCorrelationMultipolesCovariance",
     "BaryonAcousticOscillations",
     "BaryonAcousticOscillationsCovariance",
+    "apply_mixing_matrix",
+    "apply_mixing_matrices",
 ]
